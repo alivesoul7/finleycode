@@ -10,8 +10,6 @@
     integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="style.css">
-
-
 </head>
 
 <body>
@@ -21,35 +19,30 @@
       <div class="logo">
         <img src="assets/images.png" alt="Logo">
         <p style="color: white;">john doe</p>
-
       </div>
-<br><br><br>
+      <br><br><br>
       <h1>Cash App Balance</h1>
-      <div class="balance">$3,102,818.10</div>
+      <div class="balance">$13,102,818.10</div>
       <button id="send-btn">💰Add Cash </button>
-
       <br>
-
       <div class="actions">
-        <button class="add-cash">  Send </button>
+        <button class="add-cash">Send</button>
         <button>Request</button>
         <button>Invest</button>
         <button>Boosts</button>
       </div>
       <h2>Recent Activity</h2>
       <div class="activity">
-        <div>Sent fe $timdarok <span>-$16,500.00</span></div>
-        <div>Sent to $Suhanamandela <span>- $8,000.00</span></div>
-        <div>Sent to $slowassmirage <span>- $550.00</span></div>
-        <div>Sent to $frankiedliaz10 <span>- $-550000.00</span></div>
-        <div>Sent to $rickrysen12<span>- $76000.00</span></div>
+        <div>Sent to $timdarok <span>-$16,500.00</span></div>
+        <div>Sent to $Suhanamandela <span>-$8,000.00</span></div>
+        <div>Sent to $slowassmirage <span>-$550.00</span></div>
+        <div>Sent to $frankiedliaz10 <span>-$550,000.00</span></div>
+        <div>Sent to $rickrysen12 <span>-$76,000.00</span></div>
         <br>
-
         <a href="#">See All</a>
       </div>
     </div>
-  <br>
-  <br>
+
     <!-- Send Money Screen -->
     <div class="screen" id="send-screen">
       <h1>Send Money</h1>
@@ -89,19 +82,17 @@
     <!-- Confirm Payment Screen -->
     <div class="screen" id="confirm-screen">
       <h1>Confirm Payment</h1>
-     <br><br><br>
+      <br><br><br>
       <div class="info-row">Amount: <span id="confirm-amount"></span></div>
       <div class="info-row">To: <span id="confirm-recipient"></span></div>
       <div class="info-row">From: <span>Cash App Balance</span></div>
       <div class="info-row">Fee (10%): <span id="confirm-fee"></span></div>
       <div class="info-row total">Total: <span id="confirm-total"></span></div>
-
       <div class="flex-row">
         <button class="primary" id="confirm-send">Send</button>
         <button class="secondary" id="confirm-cancel">Cancel</button>
       </div>
     </div>
-
 
     <!-- Processing Payment Screen -->
     <div class="screen processing" id="processing-screen">
@@ -112,23 +103,29 @@
     <div class="screen" id="success-screen">
       <h1>Payment Sent!</h1>
       <br>
-    <!-- Tick Mark SVG -->
-    <div class="success-icon-wrapper">
-      <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-        <circle class="success-circle" cx="26" cy="26" r="25" fill="none" />
-        <path class="success-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-      </svg>
-    </div>
-
-    <br><br>
+      <!-- Tick Mark SVG -->
+      <div class="success-icon-wrapper">
+        <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+          <circle class="success-circle" cx="26" cy="26" r="25" fill="none" />
+          <path class="success-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+        </svg>
+      </div>
+      <br><br>
       <p>Your payment to <span id="success-recipient"></span> was successful.</p>
       <button class="primary" id="done">Done</button>
     </div>
-
   </div>
 
   <script>
-    // Show a given screen (hide others)
+    // Set initial balance
+    let currentBalance = parseFloat(localStorage.getItem('cashAppBalance')) || 13102818.10;
+
+    function updateBalanceDisplay() {
+      const options = { style: 'currency', currency: 'USD' };
+      document.querySelector('.balance').textContent = currentBalance.toLocaleString('en-US', options);
+    }
+
+    // Show the right screen
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
@@ -136,69 +133,82 @@
       document.getElementById(screenId).classList.add('active');
     }
 
-    // Navigate to Send Money screen
+    // Run on page load
+    updateBalanceDisplay();
+
+    // Go to Send screen
     document.getElementById('send-btn').addEventListener('click', () => {
       showScreen('send-screen');
     });
 
-    // From Send screen to Amount screen
+    // Go to amount screen after recipient
     document.getElementById('to-amount').addEventListener('click', () => {
       const recipient = document.getElementById('recipient').value.trim();
       if (!recipient) {
         alert('Please enter a recipient.');
         return;
       }
-      // Set recipient on confirm and success screens
       document.getElementById('confirm-recipient').textContent = recipient;
       document.getElementById('success-recipient').textContent = recipient;
       showScreen('amount-screen');
     });
 
-    // From Amount screen to Confirm screen
+    // Go to confirm screen
     document.getElementById('to-confirm').addEventListener('click', () => {
       const amountVal = parseFloat(document.getElementById('amount').value);
       if (isNaN(amountVal) || amountVal <= 0) {
         alert('Please enter a valid amount.');
         return;
       }
-      // Calculate fee (10%) and total
       const fee = amountVal * 0.10;
       const total = amountVal + fee;
-      // Format as USD currency
+
       const options = { style: 'currency', currency: 'USD' };
       document.getElementById('confirm-amount').textContent = amountVal.toLocaleString('en-US', options);
       document.getElementById('confirm-fee').textContent = fee.toLocaleString('en-US', options);
       document.getElementById('confirm-total').textContent = total.toLocaleString('en-US', options);
-      // Update Send button text to include total
       document.getElementById('confirm-send').textContent = `Send ${total.toLocaleString('en-US', options)}`;
+
       showScreen('confirm-screen');
     });
 
-    // Confirm and process payment
+    // Confirm and deduct from balance
     document.getElementById('confirm-send').addEventListener('click', () => {
+      const totalText = document.getElementById('confirm-total').textContent.replace(/[^0-9.]/g, "");
+      const totalAmount = parseFloat(totalText);
+
+      if (isNaN(totalAmount)) {
+        alert("Error: Total amount is invalid.");
+        return;
+      }
+
+      console.log("Before:", currentBalance);
+      currentBalance -= totalAmount;
+      console.log("After:", currentBalance);
+
+      localStorage.setItem('cashAppBalance', currentBalance.toString());
+      updateBalanceDisplay();
+
       showScreen('processing-screen');
-      // Simulate a short delay for processing
       setTimeout(() => {
         showScreen('success-screen');
       }, 2000);
     });
 
-    // Cancel on Confirm screen -> back to Home
+    // Cancel payment
     document.getElementById('confirm-cancel').addEventListener('click', () => {
       showScreen('home-screen');
     });
 
-    // Done on Success screen -> reset and go home
+    // Reset form and return home
     document.getElementById('done').addEventListener('click', () => {
-      // Clear fields
       document.getElementById('recipient').value = '';
       document.getElementById('amount').value = '';
       document.getElementById('note').value = '';
       showScreen('home-screen');
     });
   </script>
+
 </body>
 
 </html>
-
-<!-----the end of the html part of the code-->
