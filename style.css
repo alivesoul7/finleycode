@@ -350,13 +350,13 @@ button {
    /* Green accent for Add Cash and Send */
    .actions button.add-cash {
 
-       color: black;
+       color: white;
    }
 
 
    #send-btn {
        background-color: #00ff00;
-       color: white;
+       color: black;
        border: none;
        padding: 12px;
        width: 100%;
