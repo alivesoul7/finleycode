@@ -52,7 +52,7 @@ h2 {
 
 /* Action buttons row */
 .actions {
-    padding: 30px;
+    padding: 25px;
     display: flex;
     justify-content: space-between;
     margin: 1px 0;
@@ -62,7 +62,7 @@ h2 {
 
 .actions button {
     flex: 1;
-    margin: 0 4px 48.5px;
+    margin: 0 4px 80px;
     padding: 10px;
     font-size: 14px;
     background-color: #222;
