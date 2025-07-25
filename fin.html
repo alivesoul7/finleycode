@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Cash App --Fin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+    integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="fins.css">
+
+
+</head>
+
+<body>
+  <div id="app">
+    <!-- Home Screen -->
+    <div class="screen active" id="home-screen">
+      <div class="logo">
+        <img src="assets/images.png" alt="Logo">
+        <p style="color: white;">john doe</p>
+
+      </div>
+<br><br><br>
+      <h1>Cash App Balance</h1>
+      <div class="balance">$3,102,818.10</div>
+      <button id="send-btn">💰Add Cash </button>
+
+      <br>
+
+      <div class="actions">
+        <button class="add-cash">  Send </button>
+        <button>Request</button>
+        <button>Invest</button>
+        <button>Boosts</button>
+      </div>
+      <h2>Recent Activity</h2>
+      <div class="activity">
+        <div>Sent fe $timdarok <span>-$16,500.00</span></div>
+        <div>Sent to $Suhanamandela <span>- $8,000.00</span></div>
+        <div>Sent to $slowassmirage <span>- $550.00</span></div>
+        <div>Sent to $frankiedliaz10 <span>- $-550000.00</span></div>
+        <div>Sent to $rickrysen12<span>- $76000.00</span></div>
+        <br>
+
+        <a href="#">See All</a>
+      </div>
+    </div>
+  <br>
+  <br>
+    <!-- Send Money Screen -->
+    <div class="screen" id="send-screen">
+      <h1>Send Money</h1>
+      <div class="form-group">
+        <label>Who are you sending to?</label>
+        <p style="color: rgba(207, 197, 197, 0.336);">Enter their $cashtag or phone number</p>
+        <input type="text" id="recipient" placeholder="$cashtag or phone">
+      </div>
+      <button class="primary" id="to-amount">Next</button>
+      <h2>Recent Contacts</h2>
+      <div class="activity">
+        <div>$timdarok</div>
+        <div>$Suhanamandela</div>
+        <div>$slowassmirage</div>
+        <div>$frankiedliaz10</div>
+        <div>$rickrysen12</div>
+      </div>
+      <button class="secondary" onclick="showScreen('home-screen')">Cancel</button>
+    </div>
+
+    <!-- Amount Entry Screen -->
+    <div class="screen" id="amount-screen">
+      <h1>Amount</h1>
+      <div class="form-group">
+        <h3 style="text-align: center;">How much?</h3>
+        <label>Enter Amount</label>
+        <input type="number" id="amount" placeholder="$0.00">
+      </div>
+      <div class="form-group">
+        <label>For</label>
+        <input type="text" id="note" placeholder="Add a note (optional)">
+      </div>
+      <button class="primary" id="to-confirm">Next</button>
+      <button class="secondary" onclick="showScreen('send-screen')">Back</button>
+    </div>
+
+    <!-- Confirm Payment Screen -->
+    <div class="screen" id="confirm-screen">
+      <h1>Confirm Payment</h1>
+     <br><br><br>
+      <div class="info-row">Amount: <span id="confirm-amount"></span></div>
+      <div class="info-row">To: <span id="confirm-recipient"></span></div>
+      <div class="info-row">From: <span>Cash App Balance</span></div>
+      <div class="info-row">Fee (10%): <span id="confirm-fee"></span></div>
+      <div class="info-row total">Total: <span id="confirm-total"></span></div>
+
+      <div class="flex-row">
+        <button class="primary" id="confirm-send">Send</button>
+        <button class="secondary" id="confirm-cancel">Cancel</button>
+      </div>
+    </div>
+
+
+    <!-- Processing Payment Screen -->
+    <div class="screen processing" id="processing-screen">
+      <h1>Processing Payment...</h1>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="screen" id="success-screen">
+      <h1>Payment Sent!</h1>
+      <br>
+    <!-- Tick Mark SVG -->
+    <div class="success-icon-wrapper">
+      <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="success-circle" cx="26" cy="26" r="25" fill="none" />
+        <path class="success-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+      </svg>
+    </div>
+
+    <br><br>
+      <p>Your payment to <span id="success-recipient"></span> was successful.</p>
+      <button class="primary" id="done">Done</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Show a given screen (hide others)
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // Navigate to Send Money screen
+    document.getElementById('send-btn').addEventListener('click', () => {
+      showScreen('send-screen');
+    });
+
+    // From Send screen to Amount screen
+    document.getElementById('to-amount').addEventListener('click', () => {
+      const recipient = document.getElementById('recipient').value.trim();
+      if (!recipient) {
+        alert('Please enter a recipient.');
+        return;
+      }
+      // Set recipient on confirm and success screens
+      document.getElementById('confirm-recipient').textContent = recipient;
+      document.getElementById('success-recipient').textContent = recipient;
+      showScreen('amount-screen');
+    });
+
+    // From Amount screen to Confirm screen
+    document.getElementById('to-confirm').addEventListener('click', () => {
+      const amountVal = parseFloat(document.getElementById('amount').value);
+      if (isNaN(amountVal) || amountVal <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+      }
+      // Calculate fee (10%) and total
+      const fee = amountVal * 0.10;
+      const total = amountVal + fee;
+      // Format as USD currency
+      const options = { style: 'currency', currency: 'USD' };
+      document.getElementById('confirm-amount').textContent = amountVal.toLocaleString('en-US', options);
+      document.getElementById('confirm-fee').textContent = fee.toLocaleString('en-US', options);
+      document.getElementById('confirm-total').textContent = total.toLocaleString('en-US', options);
+      // Update Send button text to include total
+      document.getElementById('confirm-send').textContent = `Send ${total.toLocaleString('en-US', options)}`;
+      showScreen('confirm-screen');
+    });
+
+    // Confirm and process payment
+    document.getElementById('confirm-send').addEventListener('click', () => {
+      showScreen('processing-screen');
+      // Simulate a short delay for processing
+      setTimeout(() => {
+        showScreen('success-screen');
+      }, 2000);
+    });
+
+    // Cancel on Confirm screen -> back to Home
+    document.getElementById('confirm-cancel').addEventListener('click', () => {
+      showScreen('home-screen');
+    });
+
+    // Done on Success screen -> reset and go home
+    document.getElementById('done').addEventListener('click', () => {
+      // Clear fields
+      document.getElementById('recipient').value = '';
+      document.getElementById('amount').value = '';
+      document.getElementById('note').value = '';
+      showScreen('home-screen');
+    });
+  </script>
+</body>
+
+</html>
+
+<!-----the end of the html part of the code-->
